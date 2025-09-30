@@ -1,3 +1,7 @@
+<img width="496" height="827" alt="Screenshot 2025-09-30 at 1 31 53 AM" src="https://github.com/user-attachments/assets/4ab0fb4e-d203-4fef-b76a-d5d852710897" />
+<img width="500" height="828" alt="Screenshot 2025-09-30 at 1 31 58 AM" src="https://github.com/user-attachments/assets/4795afad-59b4-4fa0-977c-fc0eefbfd28f" />
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
