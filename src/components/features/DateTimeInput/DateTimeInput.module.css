@@ -1,0 +1,248 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  min-height: 100vh;
+  position: relative;
+}
+
+.title {
+  color: #FFF;
+  text-align: center;
+  font-family: Geist;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.timeDisplay {
+  font-size: 96px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: -0.02em;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.glowCircle {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-3xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.centerCircle {
+  border-radius: 50%;
+  filter:
+    drop-shadow(0 0 40px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 80px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 0 120px rgba(255, 255, 255, 0.2));
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.inputSection {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.calendarOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.calendarWrapper {
+  position: relative;
+  max-width: 100%;
+  animation: slideUp 0.3s ease-out;
+}
+
+.closeButton {
+  position: absolute;
+  top: calc(var(--spacing-md) * -1.5);
+  right: calc(var(--spacing-md) * -1);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #3a3a3a;
+  border-radius: 50%;
+  color: var(--color-text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.label {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 400;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-md);
+  padding-right: 40px;
+  background-color: #1a1a1a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #606060;
+}
+
+.input::placeholder {
+  color: #606060;
+}
+
+.clearButton {
+  position: absolute;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #3a3a3a;
+  color: var(--color-text-primary);
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.clearButton:hover {
+  background-color: #505050;
+}
+
+.datePickerButton {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: #1a1a1a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.datePickerButton:hover {
+  border-color: #606060;
+}
+
+.datePickerButton:focus {
+  outline: none;
+  border-color: #606060;
+}
+
+.startButton {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--color-text-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.startButton:hover {
+  opacity: 0.9;
+}
+
+.startButton:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 640px) {
+  .glowCircle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+}

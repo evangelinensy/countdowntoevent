@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/evangelineng/**)",
+      "Bash(claude mcp:*)",
+      "mcp__figma-remote-mcp__get_code",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_NjHQ1N/**)",
+      "Bash(npm create:*)",
+      "Bash(mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(npx tsc:*)",
+      "Bash(cat:*)",
+      "mcp__figma-remote-mcp__get_screenshot",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_a3odA9/**)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss init:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

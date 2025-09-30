@@ -1,0 +1,63 @@
+.app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.countdown-view {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+}
+
+.reset-button {
+  position: absolute;
+  top: var(--spacing-xl);
+  left: var(--spacing-xl);
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reset-button:hover {
+  color: var(--color-text-primary);
+}
+
+.reset-button:hover svg path {
+  fill: var(--color-text-primary);
+}
+
+.reset-button svg {
+  transition: all 0.2s;
+}
+
+.event-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  padding-top: var(--spacing-3xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.finished-message {
+  margin-top: var(--spacing-3xl);
+  text-align: center;
+}
+
+.finished-message h3 {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+}
+
+.finished-message p {
+  font-size: 20px;
+  color: var(--color-text-secondary);
+}
