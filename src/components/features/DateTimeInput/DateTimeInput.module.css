@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding: var(--spacing-lg);
   min-height: 100vh;
   position: relative;
 }
@@ -15,8 +15,8 @@
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  margin-top: var(--spacing-2xl);
-  margin-bottom: var(--spacing-3xl);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .timeDisplay {
@@ -40,8 +40,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-3xl);
-  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-lg);
+  margin-top: 0;
 }
 
 .centerCircle {
@@ -60,7 +60,7 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
   position: relative;
   z-index: 1;
 }
@@ -237,12 +237,36 @@
 }
 
 @media (max-width: 640px) {
-  .glowCircle {
-    width: 220px;
-    height: 220px;
+  .container {
+    padding: var(--spacing-md) var(--spacing-md);
   }
 
   .title {
     font-size: 20px;
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .glowCircle {
+    width: 180px;
+    height: 180px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .centerCircle {
+    width: 180px !important;
+    height: 180px !important;
+  }
+
+  .timeDisplay {
+    font-size: 64px;
+  }
+
+  .inputSection {
+    gap: var(--spacing-sm);
+  }
+
+  .startButton {
+    margin-top: var(--spacing-sm);
   }
 }
