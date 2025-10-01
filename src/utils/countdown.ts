@@ -33,7 +33,7 @@ export interface DisplayInfo {
 }
 
 export const getDisplayInfo = (timeRemaining: TimeRemaining): DisplayInfo => {
-  const { total, days, hours, minutes, seconds } = timeRemaining;
+  const { total, hours, minutes, seconds } = timeRemaining;
 
   // If more than 24 hours remaining, show days (whole numbers only)
   if (total > 24 * 60 * 60 * 1000) {

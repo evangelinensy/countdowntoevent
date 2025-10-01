@@ -20,6 +20,7 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [circleProgress, setCircleProgress] = useState(1); // 1 = full, 0 = empty
   const [isHoveringCircle, setIsHoveringCircle] = useState(false);
+  const [showResetMobile, setShowResetMobile] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -41,7 +42,19 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
       clearInterval(intervalRef.current);
     }
     setCircleProgress(1);
+    setShowResetMobile(false);
     startTimer();
+  };
+
+  // Handle mobile click
+  const handleMobileClick = () => {
+    if (showResetMobile) {
+      // Second tap - reset the timer
+      resetTimer();
+    } else {
+      // First tap - show reset text
+      setShowResetMobile(true);
+    }
   };
 
   // Start timer function
@@ -118,34 +131,6 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
       ctx.fillStyle = gradient;
       ctx.fill();
 
-      // Clip to the circle area for text rendering
-      ctx.clip();
-
-      // Calculate remaining time
-      const totalSeconds = Math.floor(circleProgress * 25 * 60); // 25 minutes in seconds (Pomodoro)
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      const timeText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-      // Draw text with gradient (only visible in clipped area)
-      ctx.font = '400 64.8px "Munro Small", monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      // Measure text to position gradient accurately
-      const textMetrics = ctx.measureText(timeText);
-      const textHeight = 64.8; // Font size
-      const textTop = centerY - textHeight / 2;
-      const textBottom = centerY + textHeight / 2;
-
-      // Create text gradient (180deg: top black to bottom 5% black)
-      const textGradient = ctx.createLinearGradient(centerX, textTop, centerX, textBottom);
-      textGradient.addColorStop(0, 'rgba(0, 0, 0, 0.8)'); // 80% opacity black at top
-      textGradient.addColorStop(1, 'rgba(0, 0, 0, 0.05)'); // 5% opacity black at bottom
-
-      ctx.fillStyle = textGradient;
-      ctx.fillText(timeText, centerX, centerY);
-
       // Restore context
       ctx.restore();
     }
@@ -197,19 +182,43 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
   }, [selectedDate, dateValue]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onClick={(e) => {
+        // Hide RESET text on mobile when clicking outside circle
+        if (showResetMobile && !(e.target as HTMLElement).closest(`.${styles.glowCircle}`)) {
+          setShowResetMobile(false);
+        }
+      }}
+    >
       <h1 className={styles.title}>COUNTDOWN</h1>
 
-      <div
-        className={`${styles.glowCircle} ${isHoveringCircle ? styles.hoverCircle : ''}`}
-        onMouseEnter={() => setIsHoveringCircle(true)}
-        onMouseLeave={() => setIsHoveringCircle(false)}
-        onClick={resetTimer}
-      >
-        <canvas ref={canvasRef} className={styles.centerCircle} style={{ width: 320, height: 320 }} />
-        {isHoveringCircle && (
-          <div className={styles.resetText}>RESET</div>
-        )}
+      <div className={styles.circleContainer}>
+        {/* Time display above the circle */}
+        <div className={styles.behindTimeDisplay}>
+          {(() => {
+            const totalSeconds = Math.floor(circleProgress * 25 * 60);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          })()}
+        </div>
+
+        <div
+          className={`${styles.glowCircle} ${isHoveringCircle ? styles.hoverCircle : ''}`}
+          onMouseEnter={() => setIsHoveringCircle(true)}
+          onMouseLeave={() => setIsHoveringCircle(false)}
+          onClick={resetTimer}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            handleMobileClick();
+          }}
+        >
+          <canvas ref={canvasRef} className={styles.centerCircle} style={{ width: 320, height: 320 }} />
+          {(isHoveringCircle || showResetMobile) && (
+            <div className={styles.resetText}>RESET</div>
+          )}
+        </div>
       </div>
 
       <div className={styles.inputSection}>

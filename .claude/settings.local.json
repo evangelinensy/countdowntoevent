@@ -24,7 +24,13 @@
       "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_xHCLaq/**)",
       "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_1Gx1r9/**)",
       "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_nGV30w/**)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd complete UI redesign with Munro and BPdots fonts, 25min Pomodoro timer, and enhanced UX\n\n- Add Munro Small and BPdotsSquares fonts for retro pixel aesthetic\n- Implement 25-minute Pomodoro countdown timer on home page with MM:SS display\n- Add interactive circle with hover bob animation and RESET functionality\n- Add tooltips on countdown circles showing remaining time (e.g., \"4h 33min 5s\")\n- Implement clockwise countdown animation for all circles\n- Add custom alert modals replacing browser alerts\n- Add URL sharing and localStorage persistence for countdowns\n- Improve mobile responsiveness with scaled input fields\n- Add default \"Counting down\" title when no event name provided\n- Optimize spacing and typography throughout the app\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(npm run build:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
