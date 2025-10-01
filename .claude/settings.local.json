@@ -19,7 +19,12 @@
       "Bash(npx tailwindcss init:*)",
       "Bash(test:*)",
       "Bash(lsof:*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_8cUSZx/**)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_xHCLaq/**)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_1Gx1r9/**)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_nGV30w/**)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

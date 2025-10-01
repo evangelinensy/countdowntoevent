@@ -18,6 +18,8 @@
   border: none;
   color: var(--color-text-secondary);
   font-size: 16px;
+  font-family: 'BPdotsSquares', monospace;
+  font-weight: 700;
   cursor: pointer;
   padding: var(--spacing-sm) var(--spacing-md);
   transition: all 0.2s;
@@ -25,6 +27,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  text-transform: uppercase;
 }
 
 .reset-button:hover {
@@ -39,12 +42,42 @@
   transition: all 0.2s;
 }
 
+.share-button {
+  position: absolute;
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  font-family: 'BPdotsSquares', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+.share-button:hover {
+  color: var(--color-text-primary);
+}
+
+.share-button svg {
+  transition: all 0.2s;
+}
+
 .event-title {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 400;
+  font-family: 'Munro Small', monospace;
   text-align: center;
   padding-top: var(--spacing-3xl);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+  text-transform: lowercase;
 }
 
 .finished-message {
@@ -60,4 +93,53 @@
 .finished-message p {
   font-size: 20px;
   color: var(--color-text-secondary);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .reset-button,
+  .share-button {
+    top: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 14px;
+  }
+
+  .reset-button {
+    left: var(--spacing-md);
+  }
+
+  .share-button {
+    right: var(--spacing-md);
+  }
+
+  .event-title {
+    font-size: 24px;
+    padding-top: var(--spacing-2xl);
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  .finished-message h3 {
+    font-size: 32px;
+  }
+
+  .finished-message p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reset-button svg {
+    width: 8px;
+    height: 14px;
+  }
+
+  .share-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .event-title {
+    font-size: 20px;
+  }
 }

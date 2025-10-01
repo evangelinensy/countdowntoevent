@@ -3,14 +3,16 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import {
   FieldError as AriaFieldError,
-  FieldErrorProps as AriaFieldErrorProps,
   Group as AriaGroup,
-  GroupProps as AriaGroupProps,
   Label as AriaLabel,
-  LabelProps as AriaLabelProps,
   Text as AriaText,
-  TextProps as AriaTextProps,
   composeRenderProps,
+} from "react-aria-components"
+import type {
+  FieldErrorProps as AriaFieldErrorProps,
+  GroupProps as AriaGroupProps,
+  LabelProps as AriaLabelProps,
+  TextProps as AriaTextProps,
 } from "react-aria-components"
 
 import { cn } from "@/lib/utils"

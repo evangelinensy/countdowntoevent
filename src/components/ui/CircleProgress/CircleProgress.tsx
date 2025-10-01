@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 import styles from './CircleProgress.module.css';
 
 interface CircleProgressProps {
@@ -8,6 +9,7 @@ interface CircleProgressProps {
   isActive?: boolean; // Is this the current counting circle?
   isFuture?: boolean; // Is this a future circle?
   isFirst?: boolean; // Is this the first circle?
+  tooltipContent?: string; // Tooltip text to show on hover
 }
 
 export const CircleProgress = ({
@@ -16,7 +18,8 @@ export const CircleProgress = ({
   animate = true,
   isActive = false,
   isFuture = false,
-  isFirst = false
+  isFirst = false,
+  tooltipContent
 }: CircleProgressProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -46,13 +49,14 @@ export const CircleProgress = ({
     ctx.fillStyle = isFuture ? 'rgba(58, 58, 58, 0.3)' : '#3A3A3A';
     ctx.fill();
 
-    // Draw progress circle (active)
+    // Draw progress circle (active) - empties clockwise
     if (progress > 0) {
       ctx.beginPath();
-      // Start from top (-90 degrees) and go clockwise
-      const startAngle = -Math.PI / 2;
-      const endAngle = startAngle + (2 * Math.PI * progress);
-      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      // To empty clockwise: start point moves clockwise as progress decreases
+      const baseAngle = -Math.PI / 2; // 12 o'clock
+      const startAngle = baseAngle + (1 - progress) * 2 * Math.PI; // Moves clockwise as time passes
+      const endAngle = baseAngle + 2 * Math.PI; // Always ends at full circle (270°)
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle, false); // false = clockwise
       ctx.lineTo(centerX, centerY);
       ctx.closePath();
       ctx.fillStyle = isFuture ? 'rgba(255, 255, 255, 0.3)' : '#FFFFFF';
@@ -68,11 +72,29 @@ export const CircleProgress = ({
     isFirst ? styles.firstCircle : ''
   ].filter(Boolean).join(' ');
 
-  return (
+  const canvas = (
     <canvas
       ref={canvasRef}
       className={className}
       style={{ width: size, height: size }}
     />
   );
+
+  // Only show tooltip for the first circle if tooltipContent is provided
+  if (isFirst && tooltipContent) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={styles.tooltipWrapper}>
+            {canvas}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="top" className="bg-black/90 text-white border-gray-700 text-xs px-2 py-1" style={{ fontFamily: 'Munro Small, monospace' }}>
+          {tooltipContent}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return canvas;
 };

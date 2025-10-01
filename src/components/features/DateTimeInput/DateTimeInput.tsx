@@ -1,4 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import { parseDate } from '@internationalized/date';
+import type { DateValue } from 'react-aria-components';
+import { I18nProvider } from 'react-aria';
+import { CalendarIcon } from '@heroicons/react/24/outline';
+import { DateField, DateInput } from '../../ui/datefield';
+import { Label } from '../../ui/field';
 import { Calendar } from '../../ui/Calendar';
 import styles from './DateTimeInput.module.css';
 
@@ -9,16 +15,40 @@ interface DateTimeInputProps {
 export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
   const [eventName, setEventName] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [dateValue, setDateValue] = useState<DateValue | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   const [circleProgress, setCircleProgress] = useState(1); // 1 = full, 0 = empty
+  const [isHoveringCircle, setIsHoveringCircle] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const intervalRef = useRef<number | null>(null);
 
-  // 3-minute countdown that ticks every 3 seconds
-  useEffect(() => {
-    const totalDuration = 3 * 60 * 1000; // 3 minutes in ms
-    const tickInterval = 3 * 1000; // 3 seconds in ms
-    const totalTicks = totalDuration / tickInterval; // 60 ticks
+  // Convert DateValue to Date
+  const dateValueToDate = (value: DateValue): Date => {
+    return new Date(value.year, value.month - 1, value.day);
+  };
+
+  // Convert Date to DateValue
+  const dateToDateValue = (date: Date): DateValue => {
+    return parseDate(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`);
+  };
+
+  // Reset timer function
+  const resetTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    setCircleProgress(1);
+    startTimer();
+  };
+
+  // Start timer function
+  const startTimer = () => {
+    const totalDuration = 25 * 60 * 1000; // 25 minutes in ms (Pomodoro)
+    const tickInterval = 1 * 1000; // 1 second in ms
+    const totalTicks = totalDuration / tickInterval; // 1500 ticks
     let currentTick = totalTicks;
 
     const interval = setInterval(() => {
@@ -32,7 +62,17 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
       }
     }, tickInterval);
 
-    return () => clearInterval(interval);
+    intervalRef.current = interval as unknown as number;
+  };
+
+  // 20-minute countdown that ticks every 1 second
+  useEffect(() => {
+    startTimer();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   // Draw the circle on canvas
@@ -44,7 +84,7 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const size = 240;
+    const size = 320;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
     ctx.scale(dpr, dpr);
@@ -56,64 +96,120 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
     const centerY = size / 2;
     const radius = size / 2;
 
-    // Only draw the remaining portion (what's left)
+    // Only draw the remaining portion (what's left) - empties clockwise
     if (circleProgress > 0) {
+      // Save the context state
+      ctx.save();
+
       ctx.beginPath();
-      // Start from top and draw clockwise for remaining time
-      const startAngle = -Math.PI / 2;
-      const endAngle = startAngle + (2 * Math.PI * circleProgress);
+      // To empty clockwise: start point moves clockwise as progress decreases
+      const baseAngle = -Math.PI / 2; // 12 o'clock
+      const startAngle = baseAngle + (1 - circleProgress) * 2 * Math.PI; // Moves clockwise as time passes
+      const endAngle = baseAngle + 2 * Math.PI; // Always ends at full circle (270°)
 
       ctx.moveTo(centerX, centerY);
-      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle, false); // false = clockwise
       ctx.closePath();
 
-      // Create gradient
+      // Create gradient for circle
       const gradient = ctx.createLinearGradient(0, 0, size, size);
       gradient.addColorStop(0, '#FFFFFF');
       gradient.addColorStop(1, '#F0F0F0');
       ctx.fillStyle = gradient;
       ctx.fill();
+
+      // Clip to the circle area for text rendering
+      ctx.clip();
+
+      // Calculate remaining time
+      const totalSeconds = Math.floor(circleProgress * 25 * 60); // 25 minutes in seconds (Pomodoro)
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const timeText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      // Draw text with gradient (only visible in clipped area)
+      ctx.font = '400 64.8px "Munro Small", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Measure text to position gradient accurately
+      const textMetrics = ctx.measureText(timeText);
+      const textHeight = 64.8; // Font size
+      const textTop = centerY - textHeight / 2;
+      const textBottom = centerY + textHeight / 2;
+
+      // Create text gradient (180deg: top black to bottom 5% black)
+      const textGradient = ctx.createLinearGradient(centerX, textTop, centerX, textBottom);
+      textGradient.addColorStop(0, 'rgba(0, 0, 0, 0.8)'); // 80% opacity black at top
+      textGradient.addColorStop(1, 'rgba(0, 0, 0, 0.05)'); // 5% opacity black at bottom
+
+      ctx.fillStyle = textGradient;
+      ctx.fillText(timeText, centerX, centerY);
+
+      // Restore context
+      ctx.restore();
     }
   }, [circleProgress]);
 
   const handleStartCountdown = () => {
-    if (!eventName.trim()) {
-      alert('Please enter an event name');
+    if (!selectedDate) {
+      setAlertMessage('Please select a date');
+      setShowAlert(true);
       return;
     }
 
-    if (!selectedDate || !selectedTime) {
-      alert('Please select a date and time');
-      return;
-    }
-
-    // Combine date and time
-    const [hours, minutes] = selectedTime.split(':').map(Number);
+    // Combine date and time (default to 12:00 AM if no time selected)
     const targetDate = new Date(selectedDate);
-    targetDate.setHours(hours, minutes, 0, 0);
+    if (selectedTime) {
+      const [hours, minutes] = selectedTime.split(':').map(Number);
+      targetDate.setHours(hours, minutes, 0, 0);
+    } else {
+      targetDate.setHours(0, 0, 0, 0);
+    }
 
     if (targetDate <= new Date()) {
-      alert('Please select a future date and time');
+      setAlertMessage("We can't go back in time. Please select a future date or time.");
+      setShowAlert(true);
       return;
     }
 
-    onSetTarget(targetDate, eventName);
+    // Use "Counting down" as default if no event name provided
+    const finalEventName = eventName.trim() || 'Counting down';
+    onSetTarget(targetDate, finalEventName);
   };
 
-  const formatDateDisplay = () => {
-    if (!selectedDate) return 'DD / MM / YY';
-    const day = String(selectedDate.getDate()).padStart(2, '0');
-    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-    const year = String(selectedDate.getFullYear()).slice(-2);
-    return `${day} / ${month} / ${year}`;
+  // Handle DateField change
+  const handleDateFieldChange = (value: DateValue | null) => {
+    setDateValue(value);
+    if (value) {
+      const date = dateValueToDate(value);
+      setSelectedDate(date);
+    } else {
+      setSelectedDate(undefined);
+    }
   };
+
+  // Sync dateValue when selectedDate changes from Calendar
+  useEffect(() => {
+    if (selectedDate && !dateValue) {
+      setDateValue(dateToDateValue(selectedDate));
+    }
+  }, [selectedDate, dateValue]);
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>COUNTDOWN</h1>
 
-      <div className={styles.glowCircle}>
-        <canvas ref={canvasRef} className={styles.centerCircle} style={{ width: 240, height: 240 }} />
+      <div
+        className={`${styles.glowCircle} ${isHoveringCircle ? styles.hoverCircle : ''}`}
+        onMouseEnter={() => setIsHoveringCircle(true)}
+        onMouseLeave={() => setIsHoveringCircle(false)}
+        onClick={resetTimer}
+      >
+        <canvas ref={canvasRef} className={styles.centerCircle} style={{ width: 320, height: 320 }} />
+        {isHoveringCircle && (
+          <div className={styles.resetText}>RESET</div>
+        )}
       </div>
 
       <div className={styles.inputSection}>
@@ -145,16 +241,25 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
         </div>
 
         <div className={styles.inputGroup}>
-          <label htmlFor="date" className={styles.label}>
-            Countdown to event
-          </label>
-          <button
-            type="button"
-            className={styles.datePickerButton}
-            onClick={() => setShowCalendar(!showCalendar)}
-          >
-            {formatDateDisplay()}
-          </button>
+          <I18nProvider locale="en-GB">
+            <DateField
+              value={dateValue}
+              onChange={handleDateFieldChange}
+            >
+              <Label className={styles.label}>Countdown to event</Label>
+              <div className={styles.dateFieldWrapper}>
+                <DateInput className={styles.dateInput} />
+                <button
+                  type="button"
+                  className={styles.calendarButton}
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  aria-label="Open calendar"
+                >
+                  <CalendarIcon className="w-5 h-5" />
+                </button>
+              </div>
+            </DateField>
+          </I18nProvider>
         </div>
 
         {showCalendar && (
@@ -186,7 +291,7 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
           </div>
         )}
 
-        {selectedDate && selectedTime && (
+        {selectedDate && (
           <button
             type="button"
             onClick={handleStartCountdown}
@@ -196,6 +301,21 @@ export const DateTimeInput = ({ onSetTarget }: DateTimeInputProps) => {
           </button>
         )}
       </div>
+
+      {/* Custom Alert Modal */}
+      {showAlert && (
+        <div className={styles.alertOverlay} onClick={() => setShowAlert(false)}>
+          <div className={styles.alertModal} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.alertMessage}>{alertMessage}</p>
+            <button
+              className={styles.alertButton}
+              onClick={() => setShowAlert(false)}
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

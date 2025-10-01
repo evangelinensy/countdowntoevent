@@ -3,21 +3,29 @@
   flex-direction: column;
   align-items: center;
   padding: var(--spacing-2xl);
-  padding-top: var(--spacing-3xl);
+  padding-top: var(--spacing-md);
   position: relative;
 }
 
 .timeDisplay {
   font-size: 120px;
-  font-weight: 700;
+  font-weight: 400;
+  font-family: 'Munro Small', monospace;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
   line-height: 1;
   margin-bottom: var(--spacing-sm);
+  text-shadow:
+    0 -3px 5px rgba(52, 66, 93, 0.60),
+    0 3px 8px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(255, 255, 255, 0.50),
+    0 0 60px rgba(255, 255, 255, 0.30);
 }
 
 .label {
   font-size: 18px;
+  font-family: 'Munro Small', monospace;
+  font-weight: 400;
   color: var(--color-text-secondary);
   text-transform: capitalize;
   margin-bottom: var(--spacing-3xl);

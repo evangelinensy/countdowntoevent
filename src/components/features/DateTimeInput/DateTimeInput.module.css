@@ -10,20 +10,22 @@
 .title {
   color: #FFF;
   text-align: center;
-  font-family: Geist;
-  font-size: 24px;
+  font-family: 'Munro Small', monospace;
+  font-size: 80px;
   font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+  font-weight: 400;
+  line-height: 60px;
+  opacity: 0.2;
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
 }
 
 .timeDisplay {
-  font-size: 96px;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-  letter-spacing: -0.02em;
+  font-family: 'Munro Small', monospace;
+  font-size: 108px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 96px;
   text-align: center;
   position: absolute;
   top: 50%;
@@ -31,17 +33,49 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   pointer-events: none;
+  background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.10) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .glowCircle {
   position: relative;
-  width: 280px;
-  height: 280px;
+  width: 360px;
+  height: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 24px;
   margin-top: 0;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glowCircle.hoverCircle {
+  animation: subtleBob 1.5s ease-in-out infinite;
+}
+
+@keyframes subtleBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.resetText {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Munro Small', monospace;
+  font-size: 16px;
+  color: #FFF;
+  opacity: 0.6;
+  pointer-events: none;
+  letter-spacing: 0.5px;
 }
 
 .centerCircle {
@@ -50,19 +84,20 @@
     drop-shadow(0 0 40px rgba(255, 255, 255, 0.5))
     drop-shadow(0 0 80px rgba(255, 255, 255, 0.3))
     drop-shadow(0 0 120px rgba(255, 255, 255, 0.2));
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   z-index: 1;
 }
 
 .inputSection {
   width: 100%;
-  max-width: 400px;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 12px;
   position: relative;
   z-index: 1;
+  margin-top: 24px;
 }
 
 .calendarOverlay {
@@ -132,13 +167,19 @@
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 6px;
 }
 
 .label {
-  font-size: 14px;
-  color: var(--color-text-primary);
-  font-weight: 400;
+  color: #BFBFBF;
+  font-feature-settings: 'case' on;
+  font-family: 'BPdotsSquares', monospace;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.408px;
+  text-transform: uppercase;
 }
 
 .inputWrapper {
@@ -149,15 +190,18 @@
 
 .input {
   width: 100%;
-  padding: var(--spacing-md);
-  padding-right: 40px;
-  background-color: #1a1a1a;
+  height: 36px;
+  padding: 8px 12px;
+  padding-right: 36px;
+  background-color: #0a0a0a;
   border: 1px solid #3a3a3a;
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--color-text-primary);
-  font-size: 16px;
-  font-family: inherit;
+  font-size: 14px;
+  font-family: 'BPdotsSquares', monospace;
+  font-weight: 700;
   transition: border-color 0.2s;
+  text-transform: uppercase;
 }
 
 .input:focus {
@@ -171,14 +215,14 @@
 
 .clearButton {
   position: absolute;
-  right: 12px;
-  width: 24px;
-  height: 24px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
   border: none;
   background-color: #3a3a3a;
   color: var(--color-text-primary);
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -191,41 +235,65 @@
   background-color: #505050;
 }
 
-.datePickerButton {
-  width: 100%;
-  padding: var(--spacing-md);
-  background-color: #1a1a1a;
+.dateFieldWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dateInput {
+  flex: 1;
+  background-color: #0a0a0a !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 6px !important;
+  color: var(--color-text-primary) !important;
+  font-size: 14px !important;
+  font-family: 'BPdotsSquares', monospace !important;
+  font-weight: 700 !important;
+  padding: 0 12px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.dateInput:hover {
+  border-color: #606060 !important;
+}
+
+.calendarButton {
+  padding: 8px;
+  background-color: #0a0a0a;
   border: 1px solid #3a3a3a;
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--color-text-primary);
-  font-size: 16px;
-  font-family: inherit;
-  text-align: left;
+  font-size: 18px;
   cursor: pointer;
   transition: border-color 0.2s;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.datePickerButton:hover {
-  border-color: #606060;
-}
-
-.datePickerButton:focus {
-  outline: none;
+.calendarButton:hover {
   border-color: #606060;
 }
 
 .startButton {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-md);
+  margin-top: 12px;
+  padding: 12px;
   background-color: var(--color-text-primary);
   color: var(--color-background);
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: inherit;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'BPdotsSquares', monospace;
   cursor: pointer;
   transition: opacity 0.2s;
+  text-transform: uppercase;
 }
 
 .startButton:hover {
@@ -233,6 +301,63 @@
 }
 
 .startButton:active {
+  transform: scale(0.98);
+}
+
+.alertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--spacing-lg);
+}
+
+.alertModal {
+  background-color: #1a1a1a;
+  border: 1px solid #3a3a3a;
+  border-radius: 12px;
+  padding: var(--spacing-2xl);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.alertMessage {
+  font-family: 'BPdotsSquares', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.alertButton {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-text-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'BPdotsSquares', monospace;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+}
+
+.alertButton:hover {
+  opacity: 0.9;
+}
+
+.alertButton:active {
   transform: scale(0.98);
 }
 
@@ -248,14 +373,14 @@
   }
 
   .glowCircle {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     margin-bottom: var(--spacing-md);
   }
 
   .centerCircle {
-    width: 180px !important;
-    height: 180px !important;
+    width: 200px !important;
+    height: 200px !important;
   }
 
   .timeDisplay {
