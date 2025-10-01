@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Countdown to Event",
+  "name": "Countdown Pomodoro Timer",
   "version": "1.0.0",
   "description": "Pomodoro timer and countdown to your important events",
   "icons": {

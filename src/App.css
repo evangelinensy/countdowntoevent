@@ -95,6 +95,25 @@
   color: var(--color-text-secondary);
 }
 
+.credit {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  font-family: 'BPdotsSquares', monospace;
+  font-size: 8px;
+  font-weight: 400;
+  color: #3a3a3a;
+  letter-spacing: 0.3px;
+  z-index: 1000;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.credit:hover {
+  color: #606060;
+}
+
 /* Mobile optimizations */
 @media (max-width: 640px) {
   .reset-button,

@@ -101,6 +101,14 @@ function App() {
           )}
         </div>
       )}
+      <a
+        href="https://www.evangeline.design"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="credit"
+      >
+        evangeline.design
+      </a>
     </div>
   );
 }
