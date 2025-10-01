@@ -30,7 +30,10 @@
       "Bash(git pull:*)",
       "Bash(git stash:*)",
       "Bash(npm run build:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run build:extension:*)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_WvbVn7/**)",
+      "Read(//var/folders/c0/mbgx5xfd18ngqgnv40n7r3hr0000gn/T/TemporaryItems/NSIRD_screencaptureui_reFGln/**)"
     ],
     "deny": [],
     "ask": []

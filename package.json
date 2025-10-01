@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:extension": "tsc -b && vite build --config vite.config.extension.ts && npm run copy:extension",
+    "copy:extension": "cp extension/manifest.json dist-extension/ && mkdir -p dist-extension/icons && cp public/icons/* dist-extension/icons/"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
