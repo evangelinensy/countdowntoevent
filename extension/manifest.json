@@ -17,8 +17,7 @@
     }
   },
   "permissions": [
-    "storage",
-    "alarms"
+    "storage"
   ],
   "host_permissions": []
 }
